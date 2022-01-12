@@ -5,7 +5,7 @@ name: default
 # Test PR
 
 steps:
-  - name: build & push release
+  - name: build
     image: thegeeklab/drone-docker-buildx:20.11@sha256:327b6fb15dc841cf80c7c429f60d695efd7c7a476fe363afac25a58befd4c203
     settings:
       auto_tag: true
@@ -33,7 +33,7 @@ kind: pipeline
 name: build pr
 
 steps:
-  - name: build & push pr
+  - name: build pr
     image: thegeeklab/drone-docker-buildx:20.11@sha256:327b6fb15dc841cf80c7c429f60d695efd7c7a476fe363afac25a58befd4c203
     settings:
       repo: mazzolino/drone-test
