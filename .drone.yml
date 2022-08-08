@@ -2,12 +2,16 @@
 kind: pipeline
 name: default
 
+# Test PR
+
 steps:
-  - name: build & push release
-    image: thegeeklab/drone-docker-buildx:20.11@sha256:327b6fb15dc841cf80c7c429f60d695efd7c7a476fe363afac25a58befd4c203
+  - name: build
+    image: thegeeklab/drone-docker-buildx:20.12.1@sha256:5439d579562a605953b386df64f1a469720f5358fa1bd0bdf225ae8d48d652b7
     settings:
       auto_tag: true
       repo: mazzolino/drone-test
+      cache_from: mazzolino/drone-test:cache
+      cache_to: mazzolino/drone-test:cache
       platforms:
         - linux/amd64
         - linux/arm64
@@ -16,10 +20,6 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      when:
-        event:
-          exclude:
-            - pull_request
 
 trigger:
   event:
@@ -31,13 +31,14 @@ kind: pipeline
 name: build pr
 
 steps:
-  - name: build & push pr
-    image: thegeeklab/drone-docker-buildx:20.11@sha256:327b6fb15dc841cf80c7c429f60d695efd7c7a476fe363afac25a58befd4c203
+  - name: build pr
+    image: thegeeklab/drone-docker-buildx:20.12.1@sha256:5439d579562a605953b386df64f1a469720f5358fa1bd0bdf225ae8d48d652b7
     settings:
       repo: mazzolino/drone-test
       tags:
         - pr-${DRONE_PULL_REQUEST}
-      dry_run: true
+      cache_from: mazzolino/drone-test:cache
+      cache_to: mazzolino/drone-test:cache
       platforms:
         - linux/amd64
         - linux/arm64
@@ -50,3 +51,8 @@ steps:
 trigger:
   event:
     - pull_request
+---
+kind: signature
+hmac: 0b9387e6d04857af29b1a0c0ea9dc84c488305f9334cd4becd0b1cdcc019bbc7
+
+...
