@@ -1,4 +1,4 @@
-FROM alpine
+FROM ubuntu AS builder
 
 RUN case "$(uname -m)" in \
   x86_64 ) \
@@ -13,3 +13,14 @@ RUN case "$(uname -m)" in \
   esac
 
 RUN echo ARCH: $(cat /tmp/ARCH)
+
+RUN echo foo >/bar
+
+
+FROM alpine
+
+COPY --from=builder /bar /
+
+RUN cat /bar
+
+RUN echo Messing this up again
